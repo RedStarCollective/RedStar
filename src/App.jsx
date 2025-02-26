@@ -3,6 +3,11 @@ import { AlertTriangle, Calendar, FileText, Users, Shield, MessageSquare, Star, 
 import PersonnelProfiles from './components/PersonnelProfiles';
 import RevolutionaryDevelopment from './components/RevolutionaryDevelopment';
 import DualPowerStrategy from './components/DualPowerStrategy';
+import MedicalResources from './components/MedicalResources';
+import CommunityReporting from './components/CommunityReporting';
+import DirectActionCoordination from './components/DirectActionCoordination';
+import ResourceLibrary from './components/ResourceLibrary';
+import SuccessStories from './components/SuccessStories';
 
 
 const RSCWebsite = () => {
@@ -176,6 +181,11 @@ const RSCWebsite = () => {
 <a href="#" onClick={() => {setActiveTab('dualpower'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">DUAL_POWER</a>
 <a href="#" onClick={() => {setActiveTab('development'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">REVOLUTIONARY_DEVELOPMENT</a>
 <a href="#" onClick={() => {setActiveTab('cadre'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">CORE_CADRE</a>
+<a href="#" onClick={() => {setActiveTab('medical'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">MEDICAL_RESOURCES</a>
+<a href="#" onClick={() => {setActiveTab('reporting'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">INTELLIGENCE_NETWORK</a>
+<a href="#" onClick={() => {setActiveTab('action'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">DIRECT_ACTION</a>
+<a href="#" onClick={() => {setActiveTab('resources'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">RESOURCE_LIBRARY</a>
+<a href="#" onClick={() => {setActiveTab('victories'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">REVOLUTIONARY_VICTORIES</a>
             {isLoggedIn ? (
               <button className="px-3 py-1 bg-red-900 border border-red-700 rounded hover:bg-red-800">
                 MEMBER_ACCESS
@@ -413,6 +423,45 @@ const RSCWebsite = () => {
 >
   <Users size={16} className="mr-2" />
   CORE_CADRE
+</button>
+<button 
+  onClick={() => setActiveTab('medical')}
+  className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'medical' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
+>
+  <Heart size={16} className="mr-2" />
+  MEDICAL_RESOURCES
+</button>
+
+<button 
+  onClick={() => setActiveTab('reporting')}
+  className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'reporting' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
+>
+  <AlertTriangle size={16} className="mr-2" />
+  INTELLIGENCE_NETWORK
+</button>
+
+<button 
+  onClick={() => setActiveTab('action')}
+  className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'action' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
+>
+  <Shield size={16} className="mr-2" />
+  DIRECT_ACTION
+</button>
+
+<button 
+  onClick={() => setActiveTab('resources')}
+  className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'resources' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
+>
+  <BookOpen size={16} className="mr-2" />
+  RESOURCE_LIBRARY
+</button>
+
+<button 
+  onClick={() => setActiveTab('victories')}
+  className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'victories' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
+>
+  <Star size={16} className="mr-2" />
+  REVOLUTIONARY_VICTORIES
 </button>
         </div>
 
@@ -745,6 +794,80 @@ const RSCWebsite = () => {
     </p>
     
     <PersonnelProfiles />
+  </div>
+)}
+{activeTab === 'medical' && (
+  <div>
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-xl font-mono text-red-500 font-bold">[ MEDICAL_RESOURCES ]</h2>
+    </div>
+    
+    <p className="text-sm text-gray-300 mb-4">
+      The People's Clinic provides comprehensive healthcare based on need rather than ability to pay.
+      Our medical programs address the unique health challenges faced by Combat Zone residents.
+    </p>
+    
+    <MedicalResources />
+  </div>
+)}
+
+{activeTab === 'reporting' && (
+  <div>
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-xl font-mono text-red-500 font-bold">[ INTELLIGENCE_NETWORK ]</h2>
+    </div>
+    
+    <p className="text-sm text-gray-300 mb-4">
+      Our community reporting system allows RSC members to share information about corporate activity,
+      police movements, and other developments affecting South Night City.
+    </p>
+    
+    <CommunityReporting />
+  </div>
+)}
+
+{activeTab === 'action' && (
+  <div>
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-xl font-mono text-red-500 font-bold">[ DIRECT_ACTION_COORDINATION ]</h2>
+    </div>
+    
+    <p className="text-sm text-gray-300 mb-4">
+      The RSC coordinates direct action to address immediate community needs while building revolutionary consciousness.
+      This system allows members to participate based on their security level and capacity.
+    </p>
+    
+    <DirectActionCoordination />
+  </div>
+)}
+
+{activeTab === 'resources' && (
+  <div>
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-xl font-mono text-red-500 font-bold">[ RESOURCE_LIBRARY ]</h2>
+    </div>
+    
+    <p className="text-sm text-gray-300 mb-4">
+      The RSC's resource library contains guides, manuals, and educational materials 
+      developed through collective experience and revolutionary practice.
+    </p>
+    
+    <ResourceLibrary />
+  </div>
+)}
+
+{activeTab === 'victories' && (
+  <div>
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-xl font-mono text-red-500 font-bold">[ REVOLUTIONARY_VICTORIES ]</h2>
+    </div>
+    
+    <p className="text-sm text-gray-300 mb-4">
+      These case studies document successful RSC actions that have improved material conditions
+      for South Night City residents while building revolutionary consciousness.
+    </p>
+    
+    <SuccessStories />
   </div>
 )}
       </main>
