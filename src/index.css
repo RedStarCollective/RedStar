@@ -11,3 +11,26 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+/* Fix horizontal scrollbar issue */
+body, html {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* Style scrollbars to match the aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+  border-left: 1px solid rgba(185, 28, 28, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(185, 28, 28, 0.7);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(220, 38, 38, 0.8);
+}

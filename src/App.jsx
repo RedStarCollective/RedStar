@@ -8,7 +8,8 @@ import CommunityReporting from './components/CommunityReporting';
 import DirectActionCoordination from './components/DirectActionCoordination';
 import ResourceLibrary from './components/ResourceLibrary';
 import SuccessStories from './components/SuccessStories';
-
+import ImprovedNavigation from './components/ImprovedNavigation';
+import ContentHeader from './components/ContentHeader';
 
 const RSCWebsite = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -211,7 +212,6 @@ const RSCWebsite = () => {
         </div>
         <div className="flex items-center space-x-4">
           <span>ENCRYPT_STATUS: ACTIVE</span>
-          <span>USERS_ONLINE: 47</span>
           <span>LATENCY: 11ms</span>
         </div>
       </div>
@@ -347,123 +347,13 @@ const RSCWebsite = () => {
           </div>
         )}
       
-        {/* Navigation Tabs */}
-        <div className="flex overflow-x-auto space-x-1 mb-6 bg-black border border-red-900 p-1 rounded-lg font-mono">
-          <button 
-            onClick={() => setActiveTab('alerts')}
-            className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'alerts' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
-          >
-            <AlertTriangle size={16} className="mr-2" />
-            COMMUNITY_ALERTS
-          </button>
-          
-          <button 
-            onClick={() => setActiveTab('events')}
-            className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'events' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
-          >
-            <Calendar size={16} className="mr-2" />
-            EVENTS_&_ACTIONS
-          </button>
-          <button 
-            onClick={() => setActiveTab('resources')}
-            className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'resources' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
-          >
-            <Heart size={16} className="mr-2" />
-            MUTUAL_AID
-          </button>
-          <button 
-            onClick={() => setActiveTab('education')}
-            className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'education' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
-          >
-            <BookOpen size={16} className="mr-2" />
-            EDUCATION
-          </button>
-          <button 
-            onClick={() => setActiveTab('committees')}
-            className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'committees' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
-          >
-            <Users size={16} className="mr-2" />
-            COMMITTEES
-          </button>
-          <button 
-            onClick={() => setActiveTab('map')}
-            className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'map' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
-          >
-            <Map size={16} className="mr-2" />
-            THREAT_MAP
-          </button>
-
-          <button 
-  onClick={() => setActiveTab('center')}
-  className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'center' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
->
-  <MapPin size={16} className="mr-2" />
-  PEOPLES_CENTER
-</button>
-
-<button 
-  onClick={() => setActiveTab('dualpower')}
-  className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'dualpower' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
->
-  <Shield size={16} className="mr-2" />
-  DUAL_POWER
-</button>
-
-<button 
-  onClick={() => setActiveTab('development')}
-  className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'development' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
->
-  <Star size={16} className="mr-2" />
-  REVOLUTIONARY_DEVELOPMENT
-</button>
-
-<button 
-  onClick={() => setActiveTab('cadre')}
-  className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'cadre' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
->
-  <Users size={16} className="mr-2" />
-  CORE_CADRE
-</button>
-<button 
-  onClick={() => setActiveTab('medical')}
-  className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'medical' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
->
-  <Heart size={16} className="mr-2" />
-  MEDICAL_RESOURCES
-</button>
-
-<button 
-  onClick={() => setActiveTab('reporting')}
-  className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'reporting' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
->
-  <AlertTriangle size={16} className="mr-2" />
-  INTELLIGENCE_NETWORK
-</button>
-
-<button 
-  onClick={() => setActiveTab('action')}
-  className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'action' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
->
-  <Shield size={16} className="mr-2" />
-  DIRECT_ACTION
-</button>
-
-<button 
-  onClick={() => setActiveTab('resources')}
-  className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'resources' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
->
-  <BookOpen size={16} className="mr-2" />
-  RESOURCE_LIBRARY
-</button>
-
-<button 
-  onClick={() => setActiveTab('victories')}
-  className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'victories' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
->
-  <Star size={16} className="mr-2" />
-  REVOLUTIONARY_VICTORIES
-</button>
-        </div>
+{/* Improved Navigation Component */}
+<ImprovedNavigation 
+  activeTab={activeTab} 
+  setActiveTab={setActiveTab} 
+  isLoggedIn={isLoggedIn} 
+  setShowLoginModal={setShowLoginModal}
+/>
 
         {/* Tab Content */}
         {activeTab === 'map' && (
