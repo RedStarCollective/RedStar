@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { AlertTriangle, Calendar, FileText, Users, Shield, MessageSquare, MapPin, Heart, BookOpen, Menu, X, Bell, Lock, Terminal, Eye, Database, Radio, Filter, Wifi, WifiOff, Map, Send, AlertCircle, Download, Zap, Activity } from 'lucide-react';
+import PersonnelProfiles from './components/PersonnelProfiles';
+import RevolutionaryDevelopment from './components/RevolutionaryDevelopment';
+import DualPowerStrategy from './components/DualPowerStrategy';
+import { MapPin, Shield, Users, Star } from 'lucide-react';
+
 
 const RSCWebsite = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -168,6 +173,10 @@ const RSCWebsite = () => {
             <a href="#" className="text-red-400 hover:text-red-300">ABOUT</a>
             <a href="#" className="text-red-400 hover:text-red-300">RESOURCES</a>
             <a href="#" className="text-red-400 hover:text-red-300">EVENTS</a>
+            <a href="#" onClick={() => {setActiveTab('center'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">PEOPLES_CENTER</a>
+<a href="#" onClick={() => {setActiveTab('dualpower'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">DUAL_POWER</a>
+<a href="#" onClick={() => {setActiveTab('development'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">REVOLUTIONARY_DEVELOPMENT</a>
+<a href="#" onClick={() => {setActiveTab('cadre'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">CORE_CADRE</a>
             {isLoggedIn ? (
               <button className="px-3 py-1 bg-red-900 border border-red-700 rounded hover:bg-red-800">
                 MEMBER_ACCESS
@@ -338,6 +347,7 @@ const RSCWebsite = () => {
             <AlertTriangle size={16} className="mr-2" />
             COMMUNITY_ALERTS
           </button>
+          
           <button 
             onClick={() => setActiveTab('events')}
             className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'events' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
@@ -373,6 +383,38 @@ const RSCWebsite = () => {
             <Map size={16} className="mr-2" />
             THREAT_MAP
           </button>
+
+          <button 
+  onClick={() => setActiveTab('center')}
+  className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'center' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
+>
+  <MapPin size={16} className="mr-2" />
+  PEOPLES_CENTER
+</button>
+
+<button 
+  onClick={() => setActiveTab('dualpower')}
+  className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'dualpower' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
+>
+  <Shield size={16} className="mr-2" />
+  DUAL_POWER
+</button>
+
+<button 
+  onClick={() => setActiveTab('development')}
+  className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'development' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
+>
+  <Star size={16} className="mr-2" />
+  REVOLUTIONARY_DEVELOPMENT
+</button>
+
+<button 
+  onClick={() => setActiveTab('cadre')}
+  className={`px-4 py-2 rounded-md whitespace-nowrap flex items-center ${activeTab === 'cadre' ? 'bg-red-900 text-white border border-red-500' : 'text-red-400 hover:bg-red-900/30'}`}
+>
+  <Users size={16} className="mr-2" />
+  CORE_CADRE
+</button>
         </div>
 
         {/* Tab Content */}
@@ -644,6 +686,68 @@ const RSCWebsite = () => {
             </div>
           </div>
         )}
+        {activeTab === 'center' && (
+  <div>
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-xl font-mono text-red-500 font-bold">[ THE_PEOPLE'S_CENTER ]</h2>
+    </div>
+    
+    <p className="text-sm text-gray-300 mb-4">
+      The People's Center operates from a converted NCPD precinct in South Night City's university district. 
+      This three-story facility serves as both our operational headquarters and a community resource hub.
+    </p>
+    
+    <PeoplesCenterMap />
+  </div>
+)}
+
+{activeTab === 'dualpower' && (
+  <div>
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-xl font-mono text-red-500 font-bold">[ DUAL_POWER_STRATEGY ]</h2>
+    </div>
+    
+    <p className="text-sm text-gray-300 mb-4">
+      The Red Star Collective builds revolutionary infrastructure while developing community power 
+      to challenge existing institutions. Each program addresses immediate needs while creating 
+      alternatives to corporate control.
+    </p>
+    
+    <DualPowerStrategy />
+  </div>
+)}
+
+{activeTab === 'development' && (
+  <div>
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-xl font-mono text-red-500 font-bold">[ REVOLUTIONARY_DEVELOPMENT ]</h2>
+    </div>
+    
+    <p className="text-sm text-gray-300 mb-4">
+      The Red Star Collective's development pathway transforms individual consciousness through 
+      practical work and political education. Our three-tier system builds both security and 
+      capacity while ensuring proper revolutionary development.
+    </p>
+    
+    <RevolutionaryDevelopment />
+  </div>
+)}
+
+{activeTab === 'cadre' && (
+  <div>
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-xl font-mono text-red-500 font-bold">[ CORE_CADRE_PROFILES ]</h2>
+    </div>
+    
+    <p className="text-sm text-gray-300 mb-4">
+      The Red Star Collective is led by a dedicated team of revolutionaries with diverse skills 
+      and backgrounds. Our core cadre coordinates the organization's strategic direction and 
+      day-to-day operations.
+    </p>
+    
+    <PersonnelProfiles />
+  </div>
+)}
       </main>
       
       {/* Footer */}
