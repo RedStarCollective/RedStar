@@ -10,6 +10,7 @@ import ResourceLibrary from './components/ResourceLibrary';
 import SuccessStories from './components/SuccessStories';
 import ImprovedNavigation from './components/ImprovedNavigation';
 import ContentHeader from './components/ContentHeader';
+import MutualAid from './components/MutualAid';
 
 const RSCWebsite = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -538,58 +539,6 @@ const RSCWebsite = () => {
           </div>
         )}
 
-        {activeTab === 'resources' && (
-          <div>
-            <h2 className="text-xl font-mono text-red-500 font-bold mb-4">[ MUTUAL_AID_RESOURCES ]</h2>
-            <div className="grid gap-6 md:grid-cols-2">
-              <div className="bg-black border border-red-900 rounded-lg p-4">
-                <h3 className="font-bold text-red-500 mb-2 font-mono">REQUEST_RESOURCES</h3>
-                <p className="text-sm mb-4">Need food, medical attention, shelter, or other assistance? Submit a request and we'll coordinate help.</p>
-                <button className="px-3 py-2 bg-red-900 border border-red-700 rounded hover:bg-red-800 w-full font-mono">
-                  SUBMIT_REQUEST
-                </button>
-              </div>
-              
-              <div className="bg-black border border-red-900 rounded-lg p-4">
-                <h3 className="font-bold text-red-500 mb-2 font-mono">OFFER_RESOURCES</h3>
-                <p className="text-sm mb-4">Have supplies, skills, or time to contribute? Let us know what you can offer to the community.</p>
-                <button className="px-3 py-2 bg-red-900 border border-red-700 rounded hover:bg-red-800 w-full font-mono">
-                  SUBMIT_OFFERING
-                </button>
-              </div>
-              
-              <div className="bg-black border border-red-900 rounded-lg p-4 md:col-span-2">
-                <h3 className="font-bold text-red-500 mb-2 font-mono">CURRENT_COMMUNITY_NEEDS</h3>
-                <div className="grid gap-2 md:grid-cols-3">
-                  <div className="bg-black border border-red-800 p-3 rounded font-mono">
-                    <h4 className="font-semibold mb-1 text-red-500">MEDICAL</h4>
-                    <ul className="text-sm list-none">
-                      <li className="mb-1">» Antibiotics</li>
-                      <li className="mb-1">» Bandages</li>
-                      <li className="mb-1">» Pain relievers</li>
-                    </ul>
-                  </div>
-                  <div className="bg-black border border-red-800 p-3 rounded font-mono">
-                    <h4 className="font-semibold mb-1 text-red-500">FOOD</h4>
-                    <ul className="text-sm list-none">
-                      <li className="mb-1">» Canned goods</li>
-                      <li className="mb-1">» Rice & beans</li>
-                      <li className="mb-1">» Infant formula</li>
-                    </ul>
-                  </div>
-                  <div className="bg-black border border-red-800 p-3 rounded font-mono">
-                    <h4 className="font-semibold mb-1 text-red-500">SERVICES</h4>
-                    <ul className="text-sm list-none">
-                      <li className="mb-1">» Medtech assistance</li>
-                      <li className="mb-1">» Tech repairs</li>
-                      <li className="mb-1">» Transport volunteers</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         {activeTab === 'education' && (
           <div>
