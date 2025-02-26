@@ -140,9 +140,17 @@ const PersonnelProfiles = () => {
             <div className="flex flex-col md:flex-row">
               {/* Profile image placeholder - would be an actual image in implementation */}
               <div className="w-full md:w-1/3 mb-4 md:mb-0 md:mr-4">
-                <div className="w-full aspect-square bg-red-900/20 border border-red-700 rounded-lg flex items-center justify-center">
-                  <div className="text-6xl text-red-500">✪</div>
-                </div>
+  <div className="w-full aspect-square bg-red-900/20 border border-red-700 rounded-lg flex items-center justify-center overflow-hidden">
+    {activePersonnel.image ? (
+      <img 
+        src={activePersonnel.image} 
+        alt={activePersonnel.name} 
+        className="w-full h-full object-cover"
+      />
+    ) : (
+      <div className="text-6xl text-red-500">✪</div>
+    )}
+  </div>
                 
                 <div className="mt-4 p-3 bg-red-900/10 border border-red-900 rounded-lg">
                   <div className="text-sm font-mono mb-2 text-red-500">OPERATIONAL_DATA</div>

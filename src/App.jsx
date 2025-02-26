@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { AlertTriangle, Calendar, FileText, Users, Shield, MessageSquare, MapPin, Heart, BookOpen, Menu, X, Bell, Lock, Terminal, Eye, Database, Radio, Filter, Wifi, WifiOff, Map, Send, AlertCircle, Download, Zap, Activity } from 'lucide-react';
+import { AlertTriangle, Calendar, FileText, Users, Shield, MessageSquare, Star, MapPin, Heart, BookOpen, Menu, X, Bell, Lock, Terminal, Eye, Database, Radio, Filter, Wifi, WifiOff, Map, Send, AlertCircle, Download, Zap, Activity } from 'lucide-react';
 import PersonnelProfiles from './components/PersonnelProfiles';
 import RevolutionaryDevelopment from './components/RevolutionaryDevelopment';
 import DualPowerStrategy from './components/DualPowerStrategy';
-import { MapPin, Shield, Users, Star } from 'lucide-react';
 
 
 const RSCWebsite = () => {
