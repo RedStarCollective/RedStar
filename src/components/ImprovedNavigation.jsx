@@ -67,6 +67,7 @@ const ImprovedNavigation = ({ activeTab, setActiveTab, isLoggedIn, setShowLoginM
         { id: 'medical', name: 'MEDICAL_RESOURCES', icon: <Heart size={16} />, security: 'public' },
         { id: 'mutual', name: 'MUTUAL_AID', icon: <Heart size={16} />, security: 'public' },
         { id: 'events', name: 'EVENTS_&_ACTIONS', icon: <Calendar size={16} />, security: 'public' },
+        { id: 'mutual', name: 'MUTUAL_AID', icon: <Heart size={16} />, security: 'public' },
       ]
     },
     {
@@ -91,6 +92,8 @@ const ImprovedNavigation = ({ activeTab, setActiveTab, isLoggedIn, setShowLoginM
         { id: 'reporting', name: 'INTELLIGENCE_NETWORK', icon: <Radio size={16} />, security: 'candidate' },
         { id: 'action', name: 'DIRECT_ACTION', icon: <Zap size={16} />, security: 'candidate' },
         { id: 'map', name: 'THREAT_MAP', icon: <Map size={16} />, security: 'full' },
+        { id: 'comms', name: 'ENCRYPTED_COMMS', icon: <MessageSquare size={16} />, security: 'candidate' },
+        { id: 'emergency', name: 'EMERGENCY_PROTOCOLS', icon: <AlertTriangle size={16} />, security: 'full' },
       ]
     }
   ];

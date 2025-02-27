@@ -11,6 +11,8 @@ import SuccessStories from './components/SuccessStories';
 import ImprovedNavigation from './components/ImprovedNavigation';
 import ContentHeader from './components/ContentHeader';
 import MutualAid from './components/MutualAid';
+import EncryptedComms from './components/EncryptedComms';
+import EmergencyProtocols from './components/EmergencyProtocols';
 
 const RSCWebsite = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -179,6 +181,9 @@ const RSCWebsite = () => {
             <a href="#" className="text-red-400 hover:text-red-300">ABOUT</a>
             <a href="#" className="text-red-400 hover:text-red-300">RESOURCES</a>
             <a href="#" className="text-red-400 hover:text-red-300">EVENTS</a>
+            <a href="#" onClick={() => {setActiveTab('mutual'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">MUTUAL_AID</a>
+<a href="#" onClick={() => {setActiveTab('comms'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">ENCRYPTED_COMMS</a>
+<a href="#" onClick={() => {setActiveTab('emergency'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">EMERGENCY_PROTOCOLS</a>
             <a href="#" onClick={() => {setActiveTab('center'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">PEOPLES_CENTER</a>
 <a href="#" onClick={() => {setActiveTab('dualpower'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">DUAL_POWER</a>
 <a href="#" onClick={() => {setActiveTab('development'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">REVOLUTIONARY_DEVELOPMENT</a>
@@ -707,6 +712,50 @@ const RSCWebsite = () => {
     </p>
     
     <SuccessStories />
+  </div>
+)}
+{activeTab === 'mutual' && (
+  <div>
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-xl font-mono text-red-500 font-bold">[ MUTUAL_AID_NETWORK ]</h2>
+    </div>
+    
+    <p className="text-sm text-gray-300 mb-4">
+      The mutual aid network coordinates resource sharing and support among community members.
+      Resources are distributed based on need rather than ability to pay.
+    </p>
+    
+    <MutualAid />
+  </div>
+)}
+
+{activeTab === 'comms' && (
+  <div>
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-xl font-mono text-red-500 font-bold">[ ENCRYPTED_COMMUNICATIONS ]</h2>
+    </div>
+    
+    <p className="text-sm text-gray-300 mb-4">
+      The RSC maintains secure communication channels for coordinating revolutionary activity.
+      All messages are end-to-end encrypted and automatically deleted after 72 hours.
+    </p>
+    
+    <EncryptedComms />
+  </div>
+)}
+
+{activeTab === 'emergency' && (
+  <div>
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-xl font-mono text-red-500 font-bold">[ EMERGENCY_PROTOCOLS ]</h2>
+    </div>
+    
+    <p className="text-sm text-gray-300 mb-4">
+      These protocols provide structured responses to various emergency scenarios.
+      Only authorized personnel can activate these protocols in genuine emergency situations.
+    </p>
+    
+    <EmergencyProtocols />
   </div>
 )}
       </main>
