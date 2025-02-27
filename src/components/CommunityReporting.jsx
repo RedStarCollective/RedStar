@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { AlertTriangle, MapPin, FileText, Camera, Clock, Send, Eye, EyeOff, Shield, Filter } from 'lucide-react';
+import { useAlerts } from '../context/AlertContext'; // Make sure this path is correct
 
 const CommunityReporting = () => {
   const [reportType, setReportType] = useState('corporate');
   const [anonymousMode, setAnonymousMode] = useState(true);
   const [showRecentReports, setShowRecentReports] = useState(true);
+  const [reportContent, setReportContent] = useState('');
+  const [reportLocation, setReportLocation] = useState('');
+  
+  // Use the alerts context
+  const { addAlert } = useAlerts();
   
   const reportTypes = [
     { id: 'corporate', name: 'CORPORATE_ACTIVITY', icon: <AlertTriangle size={16} className="mr-2 text-red-500" />, color: 'red' },
@@ -62,6 +68,35 @@ const CommunityReporting = () => {
       urgency: 'low'
     }
   ];
+  
+  // Handle report submission with alert creation
+  const handleSubmitReport = () => {
+    if (!reportLocation || !reportContent) return;
+    
+    // Map report types to alert types
+    const alertTypeMap = {
+      'corporate': 'danger',
+      'police': 'warning',
+      'gang': 'danger',
+      'resource': 'info',
+      'infrastructure': 'warning'
+    };
+    
+    // Create a new alert from the report
+    addAlert({
+      type: alertTypeMap[reportType] || 'info',
+      area: reportLocation,
+      title: `${reportType.toUpperCase()} activity reported`,
+      description: reportContent
+    });
+    
+    // Clear the form
+    setReportContent('');
+    setReportLocation('');
+    
+    // Show confirmation
+    alert('Report submitted and alert created.');
+  };
   
   // Get color based on report type
   const getTypeColor = (type) => {
@@ -159,6 +194,8 @@ const CommunityReporting = () => {
                     type="text" 
                     placeholder="Enter precise location..."
                     className="flex-grow bg-black border border-red-900 rounded-l p-2 text-sm focus:outline-none focus:border-red-700"
+                    value={reportLocation}
+                    onChange={(e) => setReportLocation(e.target.value)}
                   />
                   <button className="bg-red-900/30 border border-red-900 border-l-0 rounded-r px-3 text-red-500 flex items-center">
                     <MapPin size={16} />
@@ -173,6 +210,8 @@ const CommunityReporting = () => {
                 <textarea 
                   placeholder="Describe what you observed in detail..."
                   className="w-full bg-black border border-red-900 rounded p-2 text-sm focus:outline-none focus:border-red-700 h-24"
+                  value={reportContent}
+                  onChange={(e) => setReportContent(e.target.value)}
                 ></textarea>
               </div>
               
@@ -207,7 +246,10 @@ const CommunityReporting = () => {
               </div>
               
               {/* Submit button */}
-              <button className="w-full p-2 bg-red-900 border border-red-700 text-white font-mono rounded hover:bg-red-800 flex items-center justify-center">
+              <button 
+                className="w-full p-2 bg-red-900 border border-red-700 text-white font-mono rounded hover:bg-red-800 flex items-center justify-center"
+                onClick={handleSubmitReport}
+              >
                 <Send size={14} className="mr-2" />
                 SUBMIT_REPORT
               </button>
