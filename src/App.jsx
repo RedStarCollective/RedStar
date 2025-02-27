@@ -27,7 +27,8 @@ const App = () => {
   const [isOfflineMode, setIsOfflineMode] = useState(false);
   const [terminalText, setTerminalText] = useState('');
   const fullTerminalText = 'COLLECTIVE://SECURE.CONNECTION.ESTABLISHED...';
-  
+  const [passwordInput, setPasswordInput] = useState('');
+  const correctPassword = 'redstar';
   // ASCII art for header
   const asciiLogo = `
 ██████╗ ███████╗ ██████╗    ███████╗████████╗ █████╗ ██████╗ 
@@ -141,8 +142,16 @@ const App = () => {
   // Handle login process
   const handleLogin = (e) => {
     e.preventDefault();
-    setIsLoggedIn(true);
-    setShowLoginModal(false);
+    if (passwordInput === correctPassword) {
+      setIsLoggedIn(true);
+      setShowLoginModal(false);
+      // Optional: Show success message
+      alert('Access granted. Welcome, comrade!');
+    } else {
+      // Optional: Show error message
+      alert('Incorrect password. Access denied.');
+      setPasswordInput('');
+    }
   };
 
   // Check if section is accessible based on login status and required access level
@@ -360,60 +369,77 @@ const App = () => {
       </footer>
       
       {/* Login Modal */}
-      {showLoginModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
-          <div className="bg-black border-2 border-red-900 rounded-lg max-w-md w-full p-6 relative">
-            <button 
-              onClick={() => setShowLoginModal(false)} 
-              className="absolute top-3 right-3 text-red-500 hover:text-red-400"
-            >
-              <X size={20} />
-            </button>
-            
-            <h2 className="text-xl font-mono text-red-500 font-bold mb-6 text-center">[ SECURE_ACCESS ]</h2>
-            
-            <div className="mb-4 font-mono text-xs text-gray-500 border border-gray-800 bg-black p-2 rounded">
-              <div>ESTABLISHING SECURE CHANNEL...</div>
-              <div>ROUTING THROUGH: 89.157.xx.xx → 23.98.xx.xx → 107.23.xx.xx</div>
-              <div>ENCRYPTION: AES-256 ENABLED</div>
-              <div className="text-green-500">CONNECTION SECURE</div>
-            </div>
-            
-            <form onSubmit={handleLogin}>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-1 font-mono text-red-500">USERNAME:</label>
-                <input type="text" className="w-full bg-black border-2 border-red-800 rounded px-3 py-2 focus:outline-none focus:border-red-500 font-mono" />
-              </div>
-              
-              <div className="mb-6">
-                <label className="block text-sm font-medium mb-1 font-mono text-red-500">PASSPHRASE:</label>
-                <input type="password" className="w-full bg-black border-2 border-red-800 rounded px-3 py-2 focus:outline-none focus:border-red-500 font-mono" />
-              </div>
-              
-              <div className="flex items-center justify-between text-sm mb-6 font-mono">
-                <div className="flex items-center">
-                  <input type="checkbox" id="remember" className="mr-2" />
-                  <label htmlFor="remember" className="text-gray-400">TRUST_DEVICE</label>
-                </div>
-                <a href="#" className="text-red-500 hover:text-red-400">REQUEST_ACCESS</a>
-              </div>
-              
-              <div className="flex flex-col space-y-3">
-                <button 
-                  type="submit"
-                  className="w-full bg-red-900 border border-red-700 hover:bg-red-800 text-white py-2 rounded font-medium font-mono"
-                >
-                  LOGIN
-                </button>
-                
-                <div className="text-center text-xs text-red-500 font-mono">
-                  ALL_CONNECTIONS_ENCRYPTED_AND_ANONYMIZED
-                </div>
-              </div>
-            </form>
+      // This code should replace the login-related parts in your App.jsx
+
+// In your state declarations at the top of the App component, keep:
+const [isLoggedIn, setIsLoggedIn] = useState(false);
+const [showLoginModal, setShowLoginModal] = useState(false);
+// Add this new state for the password input:
+const [passwordInput, setPasswordInput] = useState('');
+// Simple hardcoded password - you can change this to whatever you want
+const correctPassword = 'redstar';
+
+// Replace the handleLogin function with this:
+const handleLogin = (e) => {
+  e.preventDefault();
+  if (passwordInput === correctPassword) {
+    setIsLoggedIn(true);
+    setShowLoginModal(false);
+    // Optional: Show success message
+    alert('Access granted. Welcome, comrade!');
+  } else {
+    // Optional: Show error message
+    alert('Incorrect password. Access denied.');
+    setPasswordInput('');
+  }
+};
+
+// Then replace the login modal with this simplified version:
+{showLoginModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
+    <div className="bg-black border-2 border-red-900 rounded-lg max-w-md w-full p-6 relative">
+      <button 
+        onClick={() => setShowLoginModal(false)} 
+        className="absolute top-3 right-3 text-red-500 hover:text-red-400"
+      >
+        <X size={20} />
+      </button>
+      
+      <h2 className="text-xl font-mono text-red-500 font-bold mb-6 text-center">[ SECURE_ACCESS ]</h2>
+      
+      <div className="mb-4 font-mono text-xs text-gray-500 border border-gray-800 bg-black p-2 rounded">
+        <div>ESTABLISHING SECURE CHANNEL...</div>
+        <div>ENCRYPTION: AES-256 ENABLED</div>
+        <div className="text-green-500">CONNECTION SECURE</div>
+      </div>
+      
+      <form onSubmit={handleLogin}>
+        <div className="mb-6">
+          <label className="block text-sm font-medium mb-1 font-mono text-red-500">ENTER ACCESS CODE:</label>
+          <input 
+            type="password" 
+            value={passwordInput}
+            onChange={(e) => setPasswordInput(e.target.value)}
+            className="w-full bg-black border-2 border-red-800 rounded px-3 py-2 focus:outline-none focus:border-red-500 font-mono" 
+          />
+        </div>
+        
+        <div className="flex flex-col space-y-3">
+          <button 
+            type="submit"
+            className="w-full bg-red-900 border border-red-700 hover:bg-red-800 text-white py-2 rounded font-medium font-mono"
+          >
+            AUTHENTICATE
+          </button>
+          
+          <div className="text-center text-xs text-red-500 font-mono">
+            ALL_CONNECTIONS_ENCRYPTED_AND_ANONYMIZED
           </div>
         </div>
-      )}
+      </form>
+    </div>
+  </div>
+)}
 
       {/* CSS for grid pattern and other effects */}
       <style jsx>{`
