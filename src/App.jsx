@@ -29,6 +29,7 @@ const App = () => {
   const fullTerminalText = 'COLLECTIVE://SECURE.CONNECTION.ESTABLISHED...';
   const [passwordInput, setPasswordInput] = useState('');
   const correctPassword = 'redstar';
+
   // ASCII art for header
   const asciiLogo = `
 ██████╗ ███████╗ ██████╗    ███████╗████████╗ █████╗ ██████╗ 
@@ -140,19 +141,19 @@ const App = () => {
   ];
 
   // Handle login process
-  const handleLogin = (e) => {
-    e.preventDefault();
-    if (passwordInput === correctPassword) {
-      setIsLoggedIn(true);
-      setShowLoginModal(false);
-      // Optional: Show success message
-      alert('Access granted. Welcome, comrade!');
-    } else {
-      // Optional: Show error message
-      alert('Incorrect password. Access denied.');
-      setPasswordInput('');
-    }
-  };
+ const handleLogin = (e) => {
+  e.preventDefault();
+  if (passwordInput === correctPassword) {
+    setIsLoggedIn(true);
+    setShowLoginModal(false);
+    // Optional: Show success message
+    alert('Access granted. Welcome, comrade!');
+  } else {
+    // Optional: Show error message
+    alert('Incorrect password. Access denied.');
+    setPasswordInput('');
+  }
+};
 
   // Check if section is accessible based on login status and required access level
   const canAccessSection = (requiredAccess) => {
@@ -369,33 +370,7 @@ const App = () => {
       </footer>
       
       {/* Login Modal */}
-      // This code should replace the login-related parts in your App.jsx
-
-// In your state declarations at the top of the App component, keep:
-const [isLoggedIn, setIsLoggedIn] = useState(false);
-const [showLoginModal, setShowLoginModal] = useState(false);
-// Add this new state for the password input:
-const [passwordInput, setPasswordInput] = useState('');
-// Simple hardcoded password - you can change this to whatever you want
-const correctPassword = 'redstar';
-
-// Replace the handleLogin function with this:
-const handleLogin = (e) => {
-  e.preventDefault();
-  if (passwordInput === correctPassword) {
-    setIsLoggedIn(true);
-    setShowLoginModal(false);
-    // Optional: Show success message
-    alert('Access granted. Welcome, comrade!');
-  } else {
-    // Optional: Show error message
-    alert('Incorrect password. Access denied.');
-    setPasswordInput('');
-  }
-};
-
-// Then replace the login modal with this simplified version:
-{showLoginModal && (
+      {showLoginModal && (
   <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
     <div className="bg-black border-2 border-red-900 rounded-lg max-w-md w-full p-6 relative">
       <button 
