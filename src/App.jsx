@@ -16,7 +16,9 @@ import SuccessStories from './components/SuccessStories';
 import MutualAid from './components/MutualAid';
 import EncryptedComms from './components/EncryptedComms';
 import EmergencyProtocols from './components/EmergencyProtocols';
-
+// Add these lines at the top with your other imports
+import { auth } from './firebase';
+import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -50,6 +52,18 @@ const App = () => {
     }, 50);
     
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
+    });
+    
+    return () => unsubscribe();
   }, []);
 
   // Define main navigation sections
@@ -139,11 +153,29 @@ const App = () => {
   ];
 
   // Handle login process
-  const handleLogin = (e) => {
-    e.preventDefault();
-    setIsLoggedIn(true);
+const handleLogin = async (e) => {
+  e.preventDefault();
+  
+  const email = e.target.email.value;
+  const password = e.target.password.value;
+  
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
     setShowLoginModal(false);
-  };
+  } catch (error) {
+    console.error("Login error:", error);
+    alert("Login failed: " + error.message);
+  }
+};
+
+// Add this new function
+const handleLogout = async () => {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error("Logout error:", error);
+  }
+};
 
   // Check if section is accessible based on login status and required access level
   const canAccessSection = (requiredAccess) => {
