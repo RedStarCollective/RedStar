@@ -1,100 +1,115 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { MessageSquare, Send, X, Users, Lock, Filter, AlertTriangle, Radio, Star, Shield, Heart, Eye, UserPlus, EyeOff } from 'lucide-react';
-import { db, auth } from '../firebase';
-import { collection, addDoc, query, orderBy, onSnapshot, where, serverTimestamp, limit } from 'firebase/firestore';
 
 const EncryptedComms = () => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    { 
+      id: 1, 
+      sender: 'Iō', 
+      content: 'Defense Committee meeting moved to 21:00 tonight. Same location. Agenda includes reviewing surveillance patterns around the medical distribution routes.', 
+      time: '15:42', 
+      accessLevel: 'committee',
+      category: 'coordination'
+    },
+    { 
+      id: 2, 
+      sender: 'Minata', 
+      content: 'Need medical supplies at the clinic. Continental Brands security active on Routes B and C. Take Route A. Anyone who can transport supplies contact me directly.', 
+      time: '16:03', 
+      accessLevel: 'mass',
+      category: 'alert'
+    },
+    { 
+      id: 3, 
+      sender: 'Le Fou', 
+      content: 'Night Market confirmed for 22:00 at location DELTA. Spread the word to our people in Watson and Northside. Bring containers for food distribution if possible.', 
+      time: '16:30', 
+      accessLevel: 'mass',
+      category: 'announcement'
+    },
+    { 
+      id: 4, 
+      sender: 'Sorry', 
+      content: 'Red team defensive exercise yesterday successful. All participants demonstrated improved coordination. Yellow team scheduled for tomorrow at the Wuguan, 19:00.', 
+      time: '17:15', 
+      accessLevel: 'candidate',
+      category: 'report'
+    },
+    { 
+      id: 5, 
+      sender: 'Chan-Woo', 
+      content: 'Community Kitchen needs volunteers for tomorrow morning prep shift (06:00-09:00). Three positions available. Experienced or new volunteers welcome.', 
+      time: '17:42', 
+      accessLevel: 'mass',
+      category: 'request'
+    },
+    { 
+      id: 6, 
+      sender: 'Dai-Yu Wu', 
+      content: 'Theory study session materials uploaded to the Resource Library. Focus on mutual aid as revolutionary practice. Discussion Thursday at 19:00, People\'s Center library.', 
+      time: '18:03', 
+      accessLevel: 'mass',
+      category: 'announcement'
+    },
+    { 
+      id: 7, 
+      sender: 'Leonard', 
+      content: 'Tenant council organizing meeting at UCB Container Block C successfully established new council. 27 residents participated. Follow-up actions scheduled.', 
+      time: '18:30', 
+      accessLevel: 'candidate',
+      category: 'report'
+    },
+    { 
+      id: 8, 
+      sender: 'Revolutionary Committee', 
+      content: 'ALERT: Corporate sweep reported in southern Watson district. All members in the area maintain security protocols. Non-essential operations temporarily suspended in affected zones.', 
+      time: '19:10', 
+      accessLevel: 'all',
+      category: 'alert',
+      priority: 'high'
+    }
+  ]);
+  
   const [newMessage, setNewMessage] = useState('');
   const [activeTab, setActiveTab] = useState('all');
   const [messageFilters, setMessageFilters] = useState({
-    accessLevel: 'mass', // 'all', 'mass', 'candidate', 'committee'
+    accessLevel: 'all', // 'all', 'mass', 'candidate', 'committee'
     category: 'all' // 'all', 'alert', 'announcement', 'coordination', 'request', 'report'
   });
   const [showFilters, setShowFilters] = useState(false);
-  const messagesEndRef = useRef(null);
   
-  // Subscribe to messages from Firestore when component mounts or filters change
-  useEffect(() => {
-    const messagesRef = collection(db, "messages");
-    
-    // Create query based on current filters
-    let messagesQuery = query(messagesRef, orderBy("timestamp", "desc"), limit(50));
-    
-    // Apply additional filters if needed
-    if (activeTab !== 'all') {
-      messagesQuery = query(messagesQuery, where("accessLevel", "in", [activeTab, "all"]));
+  // Filter messages based on selected filters
+  const filteredMessages = messages.filter(message => {
+    // Filter by tab (which represents access level)
+    if (activeTab !== 'all' && message.accessLevel !== activeTab && message.accessLevel !== 'all') {
+      return false;
     }
     
-    if (messageFilters.category !== 'all') {
-      messagesQuery = query(messagesQuery, where("category", "==", messageFilters.category));
+    // Filter by category if a category filter is applied
+    if (messageFilters.category !== 'all' && message.category !== messageFilters.category) {
+      return false;
     }
     
-    // Set up real-time listener
-    const unsubscribe = onSnapshot(messagesQuery, (querySnapshot) => {
-      const messagesData = [];
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        
-        // Format timestamp
-        const timestamp = data.timestamp ? data.timestamp.toDate() : new Date();
-        const timeString = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        
-        messagesData.push({
-          id: doc.id,
-          ...data,
-          time: timeString
-        });
-      });
-      
-      // Sort messages by timestamp
-      messagesData.sort((a, b) => {
-        const aTime = a.timestamp ? a.timestamp.toDate() : new Date();
-        const bTime = b.timestamp ? b.timestamp.toDate() : new Date();
-        return aTime - bTime;
-      });
-      
-      setMessages(messagesData);
-    });
-    
-    // Clean up the listener on unmount
-    return () => unsubscribe();
-  }, [activeTab, messageFilters.category]);
-  
-  // Scroll to bottom when new messages arrive
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+    return true;
+  });
   
   // Function to handle sending a new message
-  const handleSendMessage = async (e) => {
+  const handleSendMessage = (e) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
     
-    try {
-      // Get current user information
-      const user = auth.currentUser;
-      const sender = user ? user.displayName || user.email.split('@')[0] : 'Anonymous';
-      
-      // Create message object
-      const messageData = {
-        sender: sender,
-        content: newMessage,
-        timestamp: serverTimestamp(),
-        accessLevel: messageFilters.accessLevel,
-        category: 'coordination', // Default category
-        priority: 'normal'
-      };
-      
-      // Add message to Firestore
-      await addDoc(collection(db, "messages"), messageData);
-      
-      // Clear the input
-      setNewMessage('');
-    } catch (error) {
-      console.error("Error sending message:", error);
-      alert("Error sending message. Please try again.");
-    }
+    // In a real app, this would send the message to a server
+    const newMsg = {
+      id: messages.length + 1,
+      sender: 'Current User', // This would be the actual user's name
+      content: newMessage,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      accessLevel: messageFilters.accessLevel, // Set access level based on current filter
+      category: 'coordination' // Default category
+    };
+    
+    setMessages([...messages, newMsg]);
+    setNewMessage('');
   };
   
   // Function to update message filters
@@ -297,8 +312,8 @@ const EncryptedComms = () => {
           
           {/* Messages list */}
           <div className="border border-red-900 bg-black rounded mb-3 h-96 overflow-y-auto p-3 space-y-3 font-mono">
-            {messages.length > 0 ? (
-              messages.map(msg => (
+            {filteredMessages.length > 0 ? (
+              filteredMessages.map(msg => (
                 <div key={msg.id} className={`${msg.priority === 'high' ? 'border-red-500' : 'border-red-900/30'} border rounded p-2 bg-black`}>
                   <div className="flex justify-between text-xs mb-1">
                     <div className="flex items-center">
@@ -331,7 +346,6 @@ const EncryptedComms = () => {
                 </div>
               </div>
             )}
-            <div ref={messagesEndRef} />
           </div>
           
           {/* Message input */}
@@ -346,7 +360,6 @@ const EncryptedComms = () => {
             <button 
               type="submit"
               className="bg-red-900 border border-red-700 border-l-0 rounded-r px-4 text-white flex items-center hover:bg-red-800"
-              disabled={!newMessage.trim()}
             >
               <Send size={16} />
             </button>
