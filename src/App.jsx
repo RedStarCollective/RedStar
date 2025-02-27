@@ -16,6 +16,9 @@ import SuccessStories from './components/SuccessStories';
 import MutualAid from './components/MutualAid';
 import EncryptedComms from './components/EncryptedComms';
 import EmergencyProtocols from './components/EmergencyProtocols';
+import RSCTheme from './components/RSCTheme';
+import TerminalStatusBar from './components/TerminalStatusBar';
+import AnimatedRSCLogo from './components/AnimatedLogo';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -24,8 +27,6 @@ const App = () => {
   const [activeSection, setActiveSection] = useState('overview');
   const [showEmergencyProtocols, setShowEmergencyProtocols] = useState(false);
   const [isOfflineMode, setIsOfflineMode] = useState(false);
-  const [terminalText, setTerminalText] = useState('');
-  const fullTerminalText = 'COLLECTIVE://SECURE.CONNECTION.ESTABLISHED...';
   
   // ASCII art for header
   const asciiLogo = `
@@ -531,6 +532,63 @@ const OverviewSection = () => {
         </div>
       </div>
     </div>
+  );
+  return (
+    <RSCTheme>
+      <div className="min-h-screen bg-black bg-opacity-90 text-white">
+        {/* Header */}
+        <header className="relative z-10 border-b border-red-900">
+          <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div className="flex items-center space-x-2">
+              <div className="hidden md:block">
+                <AnimatedRSCLogo size="medium" />
+              </div>
+              <span className="md:hidden text-xl font-mono text-red-500 font-bold tracking-wide red-star">
+                RED_STAR.COL
+              </span>
+            </div>
+            
+            {/* Desktop navigation */}
+            <nav className="hidden md:flex space-x-4 items-center">
+              {isLoggedIn ? (
+                <div className="flex items-center text-xs text-green-500 font-mono">
+                  <Lock size={12} className="mr-1" />
+                  MEMBER_ACCESS_GRANTED
+                </div>
+              ) : (
+                <button 
+                  onClick={() => setShowLoginModal(true)}
+                  className="px-3 py-1 bg-red-900 border border-red-700 rounded font-mono hover:bg-red-800 red-glow"
+                >
+                  SECURE_LOGIN
+                </button>
+              )}
+            </nav>
+            
+            {/* Mobile menu button */}
+            <button className="md:hidden text-red-500" onClick={() => setShowMobileMenu(!showMobileMenu)}>
+              {showMobileMenu ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+          
+          {/* Mobile navigation */}
+          {showMobileMenu && (
+            <div className="md:hidden px-4 py-3 bg-black border-t border-red-900 flex flex-col space-y-2 font-mono">
+              {/* Your existing mobile navigation code */}
+            </div>
+          )}
+        </header>
+
+        {/* Terminal-like status bar */}
+        <TerminalStatusBar 
+          isOfflineMode={isOfflineMode} 
+          toggleOfflineMode={() => setIsOfflineMode(!isOfflineMode)}
+        />
+
+        {/* Rest of your application */}
+        {/* ... */}
+      </div>
+    </RSCTheme>
   );
 };
 

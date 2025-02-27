@@ -1,3 +1,200 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Import space-themed fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap');
+
+/* Font Applications */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-black text-gray-200;
+    font-family: 'Barlow', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6, .font-orbitron {
+    font-family: 'Orbitron', sans-serif;
+  }
+
+  .font-mono, pre, code, .mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+  
+  /* Terminal text animation */
+  .typing-animation {
+    border-right: 2px solid #ef4444;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+  }
+  
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+  }
+  
+  @keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: #ef4444 }
+  }
+  
+  /* Red Star animations */
+  .red-star {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .red-star::before {
+    content: "✪";
+    color: #ef4444;
+    margin-right: 0.25rem;
+    display: inline-block;
+    transform: rotate(0deg);
+    transition: transform 3s ease-in-out;
+  }
+  
+  .red-star:hover::before {
+    transform: rotate(360deg);
+  }
+  
+  /* Glowing elements */
+  .red-glow {
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .red-glow:hover {
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+  }
+  
+  /* Fix scrollbar to match theme */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.9);
+    border-left: 1px solid rgba(185, 28, 28, 0.3);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(185, 28, 28, 0.7);
+    border-radius: 2px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(220, 38, 38, 0.8);
+  }
+  
+  /* Space dust particles effect */
+  .space-dust {
+    position: fixed;
+    width: 1px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  
+  .space-dust.red {
+    background: rgba(255, 50, 50, 0.5);
+    box-shadow: 0 0 10px rgba(255, 50, 50, 0.1);
+  }
+}
+
+/* Custom component styles */
+@layer components {
+  /* Card enhancements */
+  .card-glow {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .card-glow::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      circle at center,
+      rgba(239, 68, 68, 0.1) 0%,
+      rgba(0, 0, 0, 0) 70%
+    );
+    opacity: 0;
+    transition: opacity 1s ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  .card-glow:hover::before {
+    opacity: 1;
+  }
+  
+  /* Button styles */
+  .btn-rsc {
+    @apply px-3 py-1 bg-red-900 border border-red-700 rounded font-mono hover:bg-red-800 transition-all duration-300;
+    box-shadow: 0 0 5px rgba(239, 68, 68, 0.3);
+  }
+  
+  .btn-rsc:hover {
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+  }
+  
+  /* Header enhancements */
+  .section-header {
+    @apply font-orbitron text-red-500 font-bold flex items-center;
+    text-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+  }
+  
+  /* Status indicators */
+  .status-indicator {
+    @apply relative inline-block w-2 h-2 rounded-full mr-2;
+  }
+  
+  .status-indicator::after {
+    content: '';
+    @apply absolute top-0 left-0 w-full h-full rounded-full;
+    animation: pulse 2s infinite;
+  }
+  
+  .status-online::after {
+    @apply bg-green-500;
+  }
+  
+  .status-offline::after {
+    @apply bg-red-500;
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.5);
+      opacity: 0.5;
+    }
+  }
+}
+
+/* Responsive adjustments */
+@layer utilities {
+  .glassmorphism {
+    @apply bg-black bg-opacity-40 backdrop-filter backdrop-blur-sm;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+  }
+  
+  .text-shadow-red {
+    text-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+  }
+}
