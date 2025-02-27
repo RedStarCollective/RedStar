@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  AlertTriangle, Bell, X, Lock, Terminal, Menu, 
-  Radio, Map, MessageSquare, Shield, Heart, Star
+  AlertTriangle, Shield, Heart, BookOpen, Users, MessageSquare, Star, 
+  Menu, X, Bell, Lock, Radio, Map, Info, Zap, Home, Download, Eye, EyeOff
 } from 'lucide-react';
 
-// Import all component files
+// Component imports
 import PersonnelProfiles from './components/PersonnelProfiles';
 import RevolutionaryDevelopment from './components/RevolutionaryDevelopment';
 import DualPowerStrategy from './components/DualPowerStrategy';
@@ -13,19 +13,19 @@ import CommunityReporting from './components/CommunityReporting';
 import DirectActionCoordination from './components/DirectActionCoordination';
 import ResourceLibrary from './components/ResourceLibrary';
 import SuccessStories from './components/SuccessStories';
-import ContentHeader from './components/ContentHeader';
 import MutualAid from './components/MutualAid';
 import EncryptedComms from './components/EncryptedComms';
 import EmergencyProtocols from './components/EmergencyProtocols';
 
-const RSCWebsite = () => {
+const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [activeTab, setActiveTab] = useState('home');
-  const [glitchEffect, setGlitchEffect] = useState(false);
-  const [showQuickActionsPanel, setShowQuickActionsPanel] = useState(false);
+  const [activeSection, setActiveSection] = useState('overview');
+  const [showEmergencyProtocols, setShowEmergencyProtocols] = useState(false);
   const [isOfflineMode, setIsOfflineMode] = useState(false);
+  const [terminalText, setTerminalText] = useState('');
+  const fullTerminalText = 'COLLECTIVE://SECURE.CONNECTION.ESTABLISHED...';
   
   // ASCII art for header
   const asciiLogo = `
@@ -38,9 +38,6 @@ const RSCWebsite = () => {
   `;
   
   // Simulate terminal typing effect
-  const [terminalText, setTerminalText] = useState('');
-  const fullTerminalText = 'COLLECTIVE://SECURE.CONNECTION.ESTABLISHED...';
-  
   useEffect(() => {
     let index = 0;
     const timer = setInterval(() => {
@@ -51,176 +48,142 @@ const RSCWebsite = () => {
       }
     }, 50);
     
-    // Random global glitch effect
-    const glitchTimer = setInterval(() => {
-      setGlitchEffect(true);
-      setTimeout(() => setGlitchEffect(false), 150);
-    }, 5000);
-    
-    return () => {
-      clearInterval(timer);
-      clearInterval(glitchTimer);
-    };
+    return () => clearInterval(timer);
   }, []);
-  
-  // Main navigation categories with tabs
-  const navigationCategories = [
+
+  // Define main navigation sections
+  const navigationSections = [
+    {
+      id: 'overview',
+      name: 'OVERVIEW',
+      icon: <Info size={16} />,
+      requiredAccess: 'public',
+      component: () => <OverviewSection />
+    },
     {
       id: 'community',
-      name: 'COMMUNITY_RESOURCES',
+      name: 'COMMUNITY PROGRAMS',
       icon: <Heart size={16} />,
-      tabs: [
-        { id: 'alerts', name: 'COMMUNITY_ALERTS', icon: <AlertTriangle size={16} />, security: 'public' },
-        { id: 'medical', name: 'MEDICAL_RESOURCES', icon: <Heart size={16} />, security: 'public' },
-        { id: 'mutual', name: 'MUTUAL_AID', icon: <Heart size={16} />, security: 'public' },
-        { id: 'center', name: 'PEOPLES_CENTER', icon: <Map size={16} />, security: 'public' },
-      ]
+      requiredAccess: 'public',
+      component: () => (
+        <div className="space-y-6">
+          <MutualAid />
+          <MedicalResources />
+        </div>
+      )
     },
     {
       id: 'education',
-      name: 'REVOLUTIONARY_EDUCATION',
-      icon: <Star size={16} />,
-      tabs: [
-        { id: 'dualpower', name: 'DUAL_POWER_STRATEGY', icon: <Shield size={16} />, security: 'public' },
-        { id: 'victories', name: 'REVOLUTIONARY_VICTORIES', icon: <Star size={16} />, security: 'public' },
-        { id: 'resources', name: 'RESOURCE_LIBRARY', icon: <Terminal size={16} />, security: 'mass' },
-        { id: 'development', name: 'REVOLUTIONARY_DEVELOPMENT', icon: <Star size={16} />, security: 'mass' },
-      ]
+      name: 'REVOLUTIONARY EDUCATION',
+      icon: <BookOpen size={16} />,
+      requiredAccess: 'public',
+      component: () => (
+        <div className="space-y-6">
+          <DualPowerStrategy />
+          <RevolutionaryDevelopment />
+          <SuccessStories />
+        </div>
+      )
     },
     {
-      id: 'organizing',
-      name: 'ORGANIZING_&_ACTION',
+      id: 'resources',
+      name: 'RESOURCE LIBRARY',
+      icon: <BookOpen size={16} />,
+      requiredAccess: 'mass',
+      component: () => <ResourceLibrary />
+    },
+    {
+      id: 'reporting',
+      name: 'INTELLIGENCE NETWORK',
+      icon: <Radio size={16} />,
+      requiredAccess: 'mass',
+      component: () => <CommunityReporting />
+    },
+    {
+      id: 'action',
+      name: 'DIRECT ACTION',
       icon: <Shield size={16} />,
-      tabs: [
-        { id: 'cadre', name: 'CORE_CADRE', icon: <Star size={16} />, security: 'mass' },
-        { id: 'reporting', name: 'INTELLIGENCE_NETWORK', icon: <Radio size={16} />, security: 'candidate' },
-        { id: 'action', name: 'DIRECT_ACTION', icon: <Shield size={16} />, security: 'candidate' },
-        { id: 'comms', name: 'ENCRYPTED_COMMS', icon: <MessageSquare size={16} />, security: 'candidate' },
-        { id: 'emergency', name: 'EMERGENCY_PROTOCOLS', icon: <AlertTriangle size={16} />, security: 'full' },
-      ]
+      requiredAccess: 'candidate',
+      component: () => <DirectActionCoordination />
+    },
+    {
+      id: 'comms',
+      name: 'SECURE COMMUNICATIONS',
+      icon: <MessageSquare size={16} />,
+      requiredAccess: 'candidate',
+      component: () => <EncryptedComms />
+    },
+    {
+      id: 'emergency',
+      name: 'EMERGENCY PROTOCOLS',
+      icon: <AlertTriangle size={16} />,
+      requiredAccess: 'full',
+      component: () => <EmergencyProtocols />
+    },
+    {
+      id: 'personnel',
+      name: 'CORE CADRE',
+      icon: <Users size={16} />,
+      requiredAccess: 'full',
+      component: () => <PersonnelProfiles />
     }
   ];
 
-  // Critical action buttons for quick actions panel
-  const quickActions = [
-    { id: 'alerts', name: 'URGENT ALERTS', icon: <AlertTriangle size={20} />, color: 'red', description: 'View critical community alerts' },
-    { id: 'medical', name: 'MEDICAL HELP', icon: <Heart size={20} />, color: 'red', description: 'Access the People\'s Clinic resources' },
-    { id: 'mutual', name: 'MUTUAL AID', icon: <Heart size={20} />, color: 'yellow', description: 'Request or offer community resources' },
-    { id: 'comms', name: 'SECURE COMMS', icon: <Radio size={20} />, color: 'blue', description: 'Emergency communications' },
-    { id: 'emergency', name: 'EMERGENCY PROTOCOLS', icon: <AlertTriangle size={20} />, color: 'red', description: 'Activate emergency response' },
+  // Quick access buttons for critical functions
+  const quickAccessButtons = [
+    { id: 'community', name: 'MUTUAL AID', icon: <Heart size={16} />, color: 'red' },
+    { id: 'reporting', name: 'REPORT', icon: <Radio size={16} />, color: 'blue' },
+    { id: 'emergency', name: 'EMERGENCY', icon: <AlertTriangle size={16} />, color: 'yellow' },
+    { id: 'comms', name: 'COMMS', icon: <MessageSquare size={16} />, color: 'green' }
   ];
 
+  // Handle login process
   const handleLogin = (e) => {
     e.preventDefault();
     setIsLoggedIn(true);
     setShowLoginModal(false);
   };
 
-  // Function to render the currently active tab content
-  const renderActiveTabContent = () => {
-    switch(activeTab) {
-      case 'home':
-        return <HomeDashboard setActiveTab={setActiveTab} />;
-      case 'alerts':
-        return <AlertsDashboard />;
-      case 'center':
-        return <div><ContentHeader title="THE PEOPLE'S CENTER" securityLevel="public" icon={<Map size={20} />} /><PeoplesCenterMap /></div>;
-      case 'dualpower':
-        return <div><ContentHeader title="DUAL POWER STRATEGY" securityLevel="public" icon={<Shield size={20} />} /><DualPowerStrategy /></div>;
-      case 'development':
-        return <div><ContentHeader title="REVOLUTIONARY DEVELOPMENT" securityLevel="mass" icon={<Star size={20} />} /><RevolutionaryDevelopment /></div>;
-      case 'cadre':
-        return <div><ContentHeader title="CORE CADRE PROFILES" securityLevel="mass" icon={<Star size={20} />} /><PersonnelProfiles /></div>;
-      case 'medical':
-        return <div><ContentHeader title="MEDICAL RESOURCES" securityLevel="public" icon={<Heart size={20} />} /><MedicalResources /></div>;
-      case 'reporting':
-        return <div><ContentHeader title="INTELLIGENCE NETWORK" securityLevel="candidate" icon={<Radio size={20} />} /><CommunityReporting /></div>;
-      case 'action':
-        return <div><ContentHeader title="DIRECT ACTION COORDINATION" securityLevel="candidate" icon={<Shield size={20} />} /><DirectActionCoordination /></div>;
-      case 'resources':
-        return <div><ContentHeader title="RESOURCE LIBRARY" securityLevel="mass" icon={<Terminal size={20} />} /><ResourceLibrary /></div>;
-      case 'victories':
-        return <div><ContentHeader title="REVOLUTIONARY VICTORIES" securityLevel="public" icon={<Star size={20} />} /><SuccessStories /></div>;
-      case 'mutual':
-        return <div><ContentHeader title="MUTUAL AID NETWORK" securityLevel="public" icon={<Heart size={20} />} /><MutualAid /></div>;
-      case 'comms':
-        return <div><ContentHeader title="ENCRYPTED COMMUNICATIONS" securityLevel="candidate" icon={<MessageSquare size={20} />} /><EncryptedComms /></div>;
-      case 'emergency':
-        return <div><ContentHeader title="EMERGENCY PROTOCOLS" securityLevel="full" icon={<AlertTriangle size={20} />} /><EmergencyProtocols /></div>;
-      default:
-        return <HomeDashboard setActiveTab={setActiveTab} />;
-    }
+  // Check if section is accessible based on login status and required access level
+  const canAccessSection = (requiredAccess) => {
+    if (requiredAccess === 'public') return true;
+    if (!isLoggedIn) return false;
+    
+    // In a real app, would check user's permission level against required access
+    // For demo, logged in users can access everything
+    return true;
   };
 
   return (
-    <div className={`min-h-screen bg-black text-white ${glitchEffect ? 'opacity-95' : ''}`}>
+    <div className="min-h-screen bg-black text-white">
       {/* Cyberpunk background elements */}
       <div className="fixed inset-0 z-0 overflow-hidden">
         <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-red-900 opacity-5 rounded-full blur-3xl -translate-y-1/4 translate-x-1/4"></div>
         <div className="absolute bottom-0 left-0 w-2/3 h-1/2 bg-red-600 opacity-5 rounded-full blur-3xl translate-y-1/4 -translate-x-1/4"></div>
-        
-        {/* Grid lines */}
         <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
-        
-        {/* Circuit-like paths */}
-        <div className="absolute top-0 left-0 w-full h-full opacity-10">
-          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0,100 L200,100 L200,200 L400,200 L400,300 L600,300 L600,400" stroke="red" strokeWidth="2" fill="none" />
-            <path d="M800,0 L800,200 L600,200 L600,400 L400,400 L400,600" stroke="red" strokeWidth="2" fill="none" />
-            <path d="M0,400 L200,400 L200,500 L400,500 L400,600 L600,600" stroke="gold" strokeWidth="2" fill="none" />
-          </svg>
-        </div>
       </div>
 
       {/* Header */}
       <header className="relative z-10 border-b border-red-900">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <div className="hidden md:block cursor-pointer" onClick={() => setActiveTab('home')}>
+            <div className="hidden md:block">
               <pre className="text-xs font-mono text-red-500 leading-none">
                 {asciiLogo}
               </pre>
             </div>
-            <span className="md:hidden text-xl font-mono text-red-500 font-bold tracking-wide cursor-pointer" onClick={() => setActiveTab('home')}>
+            <span className="md:hidden text-xl font-mono text-red-500 font-bold tracking-wide">
               ✪ RED_STAR.COL ✪
             </span>
           </div>
           
           {/* Desktop navigation */}
-          <nav className="hidden md:flex space-x-6 items-center">
-            <button 
-              onClick={() => setActiveTab('alerts')}
-              className="flex items-center space-x-1 px-3 py-1 bg-red-700 border border-red-500 rounded font-mono hover:bg-red-600 text-white"
-            >
-              <Bell size={16} />
-              <span>ALERTS</span>
-            </button>
-            
-            <button 
-              onClick={() => setActiveTab('medical')}
-              className="font-mono text-red-400 hover:text-red-300"
-            >
-              MEDICAL
-            </button>
-            
-            <button 
-              onClick={() => setActiveTab('mutual')}
-              className="font-mono text-red-400 hover:text-red-300"
-            >
-              MUTUAL_AID
-            </button>
-            
-            <button 
-              onClick={() => setShowQuickActionsPanel(!showQuickActionsPanel)}
-              className="font-mono text-red-400 hover:text-red-300"
-            >
-              QUICK_ACCESS
-            </button>
-            
+          <nav className="hidden md:flex space-x-4 items-center">
             {isLoggedIn ? (
-              <button className="px-3 py-1 bg-red-900 border border-red-700 rounded font-mono hover:bg-red-800">
-                MEMBER_ACCESS
-              </button>
+              <div className="flex items-center text-xs text-green-500 font-mono">
+                <Lock size={12} className="mr-1" />
+                MEMBER_ACCESS_GRANTED
+              </div>
             ) : (
               <button 
                 onClick={() => setShowLoginModal(true)}
@@ -239,40 +202,43 @@ const RSCWebsite = () => {
         
         {/* Mobile navigation */}
         {showMobileMenu && (
-          <div className="md:hidden px-4 py-3 bg-black border-t border-red-900 flex flex-col space-y-3 font-mono">
-            <button onClick={() => {setActiveTab('home'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">HOME</button>
-            <button onClick={() => {setActiveTab('alerts'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">ALERTS</button>
-            <button onClick={() => {setActiveTab('medical'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">MEDICAL</button>
-            <button onClick={() => {setActiveTab('mutual'); setShowMobileMenu(false);}} className="text-red-400 hover:text-red-300">MUTUAL_AID</button>
+          <div className="md:hidden px-4 py-3 bg-black border-t border-red-900 flex flex-col space-y-2 font-mono">
+            {navigationSections.map(section => {
+              const isAccessible = canAccessSection(section.requiredAccess);
+              
+              return (
+                <button
+                  key={section.id}
+                  onClick={() => {
+                    if (isAccessible) {
+                      setActiveSection(section.id);
+                      setShowMobileMenu(false);
+                    } else {
+                      setShowLoginModal(true);
+                    }
+                  }}
+                  className={`text-left px-3 py-2 rounded flex items-center justify-between ${
+                    activeSection === section.id 
+                      ? 'bg-red-900/30 text-white' 
+                      : 'text-gray-400 hover:bg-red-900/10'
+                  }`}
+                >
+                  <div className="flex items-center">
+                    {section.icon}
+                    <span className="ml-2">{section.name}</span>
+                  </div>
+                  
+                  {!isAccessible && <Lock size={12} className="text-yellow-500" />}
+                </button>
+              );
+            })}
             
-            {/* Simplified category navigation for mobile */}
-            {navigationCategories.map(category => (
-              <div key={category.id} className="pt-2">
-                <div className="text-red-500 font-bold text-sm">{category.name}</div>
-                <div className="pl-3 flex flex-col space-y-2 mt-1">
-                  {category.tabs.map(tab => (
-                    <button 
-                      key={tab.id}
-                      onClick={() => {setActiveTab(tab.id); setShowMobileMenu(false);}}
-                      className="text-gray-400 hover:text-red-300 text-left flex items-center"
-                    >
-                      {tab.icon}
-                      <span className="ml-2">{tab.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ))}
-            
-            {isLoggedIn ? (
-              <button className="px-3 py-1 bg-red-900 border border-red-700 rounded hover:bg-red-800">
-                MEMBER_ACCESS
-              </button>
-            ) : (
+            {!isLoggedIn && (
               <button 
                 onClick={() => setShowLoginModal(true)}
-                className="px-3 py-1 bg-red-900 border border-red-700 rounded hover:bg-red-800"
+                className="mt-2 px-3 py-2 bg-red-900 border border-red-700 rounded font-mono hover:bg-red-800 flex items-center justify-center"
               >
+                <Lock size={16} className="mr-2" />
                 SECURE_LOGIN
               </button>
             )}
@@ -283,61 +249,96 @@ const RSCWebsite = () => {
       {/* Terminal-like status bar */}
       <div className="bg-black border-b border-red-900 py-1 px-4 font-mono text-xs text-red-500 flex justify-between items-center overflow-hidden relative z-10">
         <div className="flex items-center">
-          <Terminal size={14} className="mr-2" />
+          <Radio size={14} className="mr-2" />
           <span>{terminalText}</span>
           <span className="animate-pulse">█</span>
         </div>
         <div className="flex items-center space-x-4">
-          <span>ENCRYPT_STATUS: ACTIVE</span>
-          <span>LATENCY: 11ms</span>
+          <button
+            onClick={() => setIsOfflineMode(!isOfflineMode)}
+            className="flex items-center"
+          >
+            {isOfflineMode ? (
+              <><EyeOff size={12} className="text-green-500 mr-1" /> OFFLINE_MODE</>
+            ) : (
+              <><Eye size={12} className="text-blue-500 mr-1" /> ONLINE_MODE</>
+            )}
+          </button>
         </div>
       </div>
 
-      {/* Quick Actions Panel (replaces the emergency and comms buttons) */}
-      {showQuickActionsPanel && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
-          <div className="bg-black border-2 border-red-900 rounded-lg max-w-3xl w-full p-6 relative">
-            <button 
-              onClick={() => setShowQuickActionsPanel(false)} 
-              className="absolute top-3 right-3 text-red-500 hover:text-red-400"
-            >
-              <X size={20} />
-            </button>
-            
-            <h2 className="text-xl font-mono text-red-500 font-bold mb-6 text-center">[ QUICK_ACCESS_PANEL ]</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {quickActions.map(action => (
-                <button 
-                  key={action.id}
-                  onClick={() => {
-                    setActiveTab(action.id);
-                    setShowQuickActionsPanel(false);
-                  }}
-                  className={`bg-black border-2 border-${action.color}-900 rounded-lg p-4 text-left hover:bg-${action.color}-900/20 transition-colors`}
-                >
-                  <div className="flex items-center mb-2">
-                    <div className={`w-10 h-10 rounded-full bg-${action.color}-900/30 flex items-center justify-center mr-3`}>
-                      {action.icon}
-                    </div>
-                    <h3 className="font-bold text-white">{action.name}</h3>
-                  </div>
-                  <p className="text-sm text-gray-400">{action.description}</p>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Main content */}
-      <main className="container mx-auto px-4 py-8 relative z-10">
-        {/* Render current tab content */}
-        {renderActiveTabContent()}
+      <main className="container mx-auto px-4 py-6 relative z-10">
+        {/* Security Banner */}
+        <div className="mb-6 p-3 bg-black border border-yellow-600 rounded-lg flex items-center text-sm font-mono">
+          <Lock className="mr-2 text-yellow-500" size={16} />
+          <span>
+            <span className="text-yellow-500 font-semibold">[SECURE CONNECTION ACTIVE]</span> • Communications encrypted through REROUTED_PROXY_CHAIN
+          </span>
+        </div>
+        
+        {/* Quick Access Bar */}
+        <div className="mb-6 grid grid-cols-4 gap-2">
+          {quickAccessButtons.map(button => {
+            const isAccessible = canAccessSection(
+              navigationSections.find(s => s.id === button.id)?.requiredAccess || 'public'
+            );
+            
+            return (
+              <button
+                key={button.id}
+                onClick={() => {
+                  if (isAccessible) {
+                    setActiveSection(button.id);
+                  } else {
+                    setShowLoginModal(true);
+                  }
+                }}
+                className={`p-2 rounded-lg flex flex-col items-center justify-center bg-${button.color}-900/20 border border-${button.color}-900/50 text-${button.color}-500 ${!isAccessible ? 'opacity-70' : 'hover:bg-${button.color}-900/40'}`}
+              >
+                {button.icon}
+                <span className="text-xs mt-1">{button.name}</span>
+                {!isAccessible && <Lock size={10} className="mt-1" />}
+              </button>
+            );
+          })}
+        </div>
+        
+        {/* Navigation Tabs */}
+        <div className="mb-6 hidden md:flex flex-wrap gap-2 border-b border-red-900 pb-2">
+          {navigationSections.map(section => {
+            const isAccessible = canAccessSection(section.requiredAccess);
+            
+            return (
+              <button
+                key={section.id}
+                onClick={() => {
+                  if (isAccessible) {
+                    setActiveSection(section.id);
+                  } else {
+                    setShowLoginModal(true);
+                  }
+                }}
+                className={`px-3 py-2 rounded-t flex items-center ${
+                  activeSection === section.id 
+                    ? 'bg-red-900 text-white' 
+                    : 'text-gray-400 hover:bg-red-900/30'
+                }`}
+              >
+                {section.icon}
+                <span className="ml-2">{section.name}</span>
+                {!isAccessible && <Lock size={12} className="ml-2 text-yellow-500" />}
+              </button>
+            );
+          })}
+        </div>
+        
+        {/* Active Content Section */}
+        {navigationSections.find(section => section.id === activeSection)?.component()}
       </main>
       
       {/* Footer */}
-      <footer className="bg-black border-t border-red-900 py-8 relative z-10">
+      <footer className="bg-black border-t border-red-900 py-4 relative z-10">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
@@ -421,336 +422,116 @@ const RSCWebsite = () => {
             linear-gradient(to right, rgba(255, 0, 0, 0.1) 1px, transparent 1px),
             linear-gradient(to bottom, rgba(255, 0, 0, 0.1) 1px, transparent 1px);
         }
-        
-        .glitch-effect {
-          animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
-        }
-        
-        @keyframes glitch {
-          0% {
-            transform: translate(0);
-          }
-          20% {
-            transform: translate(-2px, 2px);
-          }
-          40% {
-            transform: translate(-2px, -2px);
-          }
-          60% {
-            transform: translate(2px, 2px);
-          }
-          80% {
-            transform: translate(2px, -2px);
-          }
-          100% {
-            transform: translate(0);
-          }
-        }
-        
-        .stripe-bg {
-          background-image: repeating-linear-gradient(
-            45deg,
-            currentColor,
-            currentColor 1px,
-            transparent 1px,
-            transparent 10px
-          );
-        }
       `}</style>
     </div>
   );
 };
 
-export default RSCWebsite;
-
-// Home Dashboard Component (new addition)
-const HomeDashboard = ({ setActiveTab }) => {
-  return (
-    <div>
-      <div className="mb-6">
-        <h2 className="text-xl font-mono text-red-500 font-bold">[ RED_STAR_COLLECTIVE ]</h2>
-        <p className="text-sm text-gray-300 mt-2">
-          Building revolutionary dual power in South Night City through mutual aid, community defense, 
-          and political education.
-        </p>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        {/* Quick Access Cards */}
-        <div onClick={() => setActiveTab('alerts')} className="bg-black border border-red-900 hover:border-red-700 rounded-lg p-4 cursor-pointer">
-          <div className="flex items-center mb-2">
-            <AlertTriangle size={20} className="text-red-500 mr-2" />
-            <h3 className="font-bold text-red-500">COMMUNITY ALERTS</h3>
-          </div>
-          <p className="text-sm text-gray-400">Critical information about corporate activity, security threats, and community emergencies.</p>
-        </div>
-        
-        <div onClick={() => setActiveTab('medical')} className="bg-black border border-red-900 hover:border-red-700 rounded-lg p-4 cursor-pointer">
-          <div className="flex items-center mb-2">
-            <Heart size={20} className="text-red-500 mr-2" />
-            <h3 className="font-bold text-red-500">MEDICAL RESOURCES</h3>
-          </div>
-          <p className="text-sm text-gray-400">Access the People's Clinic services, medical guides, and emergency care information.</p>
-        </div>
-        
-        <div onClick={() => setActiveTab('mutual')} className="bg-black border border-red-900 hover:border-red-700 rounded-lg p-4 cursor-pointer">
-          <div className="flex items-center mb-2">
-            <Heart size={20} className="text-red-500 mr-2" />
-            <h3 className="font-bold text-red-500">MUTUAL AID NETWORK</h3>
-          </div>
-          <p className="text-sm text-gray-400">Request or offer resources through our community distribution network.</p>
-        </div>
-        
-        <div onClick={() => setActiveTab('reporting')} className="bg-black border border-red-900 hover:border-red-700 rounded-lg p-4 cursor-pointer">
-          <div className="flex items-center mb-2">
-            <Radio size={20} className="text-red-500 mr-2" />
-            <h3 className="font-bold text-red-500">INTELLIGENCE NETWORK</h3>
-          </div>
-          <p className="text-sm text-gray-400">Report corporate activity, police movements, and community developments.</p>
-        </div>
-        
-        <div onClick={() => setActiveTab('action')} className="bg-black border border-red-900 hover:border-red-700 rounded-lg p-4 cursor-pointer">
-          <div className="flex items-center mb-2">
-            <Shield size={20} className="text-red-500 mr-2" />
-            <h3 className="font-bold text-red-500">DIRECT ACTION</h3>
-          </div>
-          <p className="text-sm text-gray-400">Coordinate community defense, mutual aid operations, and collective actions.</p>
-        </div>
-        
-        <div onClick={() => setActiveTab('dualpower')} className="bg-black border border-red-900 hover:border-red-700 rounded-lg p-4 cursor-pointer">
-          <div className="flex items-center mb-2">
-            <Star size={20} className="text-red-500 mr-2" />
-            <h3 className="font-bold text-red-500">DUAL POWER STRATEGY</h3>
-          </div>
-          <p className="text-sm text-gray-400">Learn about our approach to building revolutionary alternatives alongside resistance.</p>
-        </div>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Latest Alert */}
-        <div className="md:col-span-2 bg-black border border-red-900 rounded-lg p-4">
-          <div className="flex justify-between items-center mb-3">
-            <h3 className="font-bold text-red-500 flex items-center">
-              <AlertTriangle size={16} className="mr-2" />
-              LATEST ALERT
-            </h3>
-            <span className="text-xs text-gray-500">15 min ago</span>
-          </div>
-          <div className="p-3 border border-red-700 bg-red-900/10 rounded-lg mb-3">
-            <h4 className="font-bold text-white mb-1">Militech security sweep in South Night City</h4>
-            <p className="text-sm text-gray-300">Heavy corporate presence reported on blocks 15-22. Avoid area if possible. Defense Committee monitoring situation.</p>
-          </div>
-          <button onClick={() => setActiveTab('alerts')} className="text-red-500 text-sm hover:underline flex items-center">
-            VIEW ALL ALERTS
-          </button>
-        </div>
-        
-        {/* Quick Contact */}
-        <div className="bg-black border border-red-900 rounded-lg p-4">
-          <h3 className="font-bold text-red-500 flex items-center mb-3">
-            <MessageSquare size={16} className="mr-2" />
-            EMERGENCY CONTACT
-          </h3>
-          <div className="space-y-3 text-sm">
-            <div className="flex items-center">
-              <Heart size={14} className="text-red-500 mr-2" />
-              <div>
-                <div className="font-bold">MEDICAL EMERGENCY</div>
-                <div className="text-gray-400">FREQ-774</div>
-              </div>
-            </div>
-            <div className="flex items-center">
-              <Shield size={14} className="text-red-500 mr-2" />
-              <div>
-                <div className="font-bold">SECURITY THREAT</div>
-                <div className="text-gray-400">FREQ-991</div>
-              </div>
-            </div>
-            <div className="flex items-center">
-              <Star size={14} className="text-red-500 mr-2" />
-              <div>
-                <div className="font-bold">PEOPLE'S CENTER</div>
-                <div className="text-gray-400">FREQ-001</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Alerts Dashboard Component (new addition)
-const AlertsDashboard = () => {
-  // Fictional alert data
+// Overview Section Component
+const OverviewSection = () => {
   const alerts = [
     { id: 1, type: 'danger', area: 'South Night City', title: 'Militech security sweep', description: 'Heavy corporate presence reported on blocks 15-22. Avoid area if possible.', time: '15 min ago' },
     { id: 2, type: 'warning', area: 'Heywood', title: 'Medical supplies needed', description: 'The People\'s Clinic is low on antibiotics and bandages.', time: '1 hour ago' },
     { id: 3, type: 'info', area: 'Watson', title: 'Night Market location', description: 'Tonight\'s mutual aid distribution at the old factory on 7th.', time: '3 hours ago' },
-    { id: 4, type: 'danger', area: 'University District', title: 'Corporate enforcers evicting residents', description: 'Container Block C7 residents facing immediate eviction. Solidarity response organizing.', time: '4 hours ago' },
-    { id: 5, type: 'warning', area: 'Eastern Watson', title: 'Radiation levels elevated', description: 'Industrial leak at Biotechnica facility. Avoid sector 5 if possible.', time: '5 hours ago' },
   ];
-  
-  // Get badge color based on alert type
-  const getAlertBadge = (type) => {
-    switch(type) {
-      case 'danger':
-        return <span className="bg-red-900/30 text-red-500 text-xs px-2 py-0.5 rounded">DANGER</span>;
-      case 'warning':
-        return <span className="bg-yellow-900/30 text-yellow-500 text-xs px-2 py-0.5 rounded">WARNING</span>;
-      case 'info':
-        return <span className="bg-blue-900/30 text-blue-500 text-xs px-2 py-0.5 rounded">INFO</span>;
-      default:
-        return <span className="bg-gray-900/30 text-gray-500 text-xs px-2 py-0.5 rounded">UNKNOWN</span>;
-    }
-  };
+
+  const events = [
+    { id: 1, title: 'Community Defense Training', location: 'The Wuguan', date: 'Feb 26th - 18:00', organizer: 'Sorry', attendees: 12 },
+    { id: 2, title: 'Political Education Session', location: 'People\'s Center Library', date: 'Feb 27th - 19:00', organizer: 'Dai-Yu Wu', attendees: 8 },
+    { id: 3, title: 'Mutual Aid Distribution', location: 'East Side Community Hub', date: 'Feb 28th - 16:00', organizer: 'Chan-Woo Park', attendees: 20 },
+  ];
 
   return (
-    <div>
-      <ContentHeader title="COMMUNITY ALERTS" securityLevel="public" icon={<AlertTriangle size={20} />} />
-      
-      <p className="text-sm text-gray-300 mb-6">
-        The RSC maintains real-time monitoring of corporate activity, police movements, and other 
-        threats to the community. Alerts are verified by multiple sources before being published.
-      </p>
-      
-      <div className="space-y-4">
-        {alerts.map(alert => (
-          <div 
-            key={alert.id} 
-            className={`p-4 rounded-lg border relative overflow-hidden ${
-              alert.type === 'danger' ? 'border-red-700 bg-black' : 
-              alert.type === 'warning' ? 'border-yellow-700 bg-black' : 
-              'border-blue-700 bg-black'
-            }`}
-          >
-            {/* Diagonal stripes background for visual effect */}
-            <div className={`absolute inset-0 opacity-5 stripe-bg ${
-              alert.type === 'danger' ? 'bg-red-500' : 
-              alert.type === 'warning' ? 'bg-yellow-500' : 
-              'bg-blue-500'
-            }`}></div>
-            
-            <div className="flex justify-between relative">
-              <h3 className={`font-mono font-bold ${
-                alert.type === 'danger' ? 'text-red-500' : 
-                alert.type === 'warning' ? 'text-yellow-500' : 
-                'text-blue-500'
-              }`}>{alert.title}</h3>
-              <span className="text-xs opacity-70 font-mono">{alert.time}</span>
-            </div>
-            <div className="text-sm opacity-80 mb-2 font-mono relative">
-              <Map size={12} className="inline mr-1" />
-              {alert.area}
-            </div>
-            <p className="text-sm relative">{alert.description}</p>
-            
-            <div className="mt-3 flex justify-between">
-              <div>
-                {getAlertBadge(alert.type)}
-              </div>
-              
-              <div className="flex space-x-2">
-                <button className="px-2 py-1 bg-black border border-red-700 hover:bg-red-900/20 rounded text-xs text-red-500 font-mono">
-                  DETAILS
-                </button>
-                <button className="px-2 py-1 bg-red-900 border border-red-700 hover:bg-red-800 rounded text-xs text-white font-mono">
-                  RESPOND
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-// People's Center Map Component (placeholder)
-const PeoplesCenterMap = () => {
-  return (
-    <div className="border-2 border-red-900 rounded-lg p-4 bg-black">
-      <div className="mb-6">
-        <p className="text-sm text-gray-300">
-          The People's Center operates from a converted NCPD precinct in South Night City's university district. 
-          This three-story facility serves as both our operational headquarters and a community resource hub.
+    <div className="space-y-6">
+      {/* Introduction */}
+      <div className="p-6 bg-black border-2 border-red-900 rounded-lg">
+        <h2 className="text-xl font-mono text-red-500 font-bold mb-4">[ RED_STAR_COLLECTIVE ]</h2>
+        <p className="text-gray-300 mb-4">
+          The Red Star Collective builds dual power systems in South Night City, creating revolutionary alternatives 
+          while undermining capitalist institutions. Each program addresses immediate needs while developing 
+          structures that prefigure post-revolutionary society.
+        </p>
+        <p className="text-gray-300">
+          Based at The People's Center, we provide healthcare, food distribution, community defense, education, 
+          and other mutual aid services to the residents of South Night City.
         </p>
       </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="border border-red-900 rounded-lg p-3 bg-black">
-          <h3 className="font-bold text-red-500 mb-2 flex items-center">
-            <Heart size={16} className="mr-2" />
-            FLOOR 1: COMMUNITY SERVICES
-          </h3>
-          <ul className="text-sm text-gray-300 space-y-1">
-            <li>• Community Kitchen & Dining Hall</li>
-            <li>• Distribution Center</li>
-            <li>• Reception & Security</li>
-            <li>• Meeting Spaces</li>
-          </ul>
-        </div>
-        
-        <div className="border border-red-900 rounded-lg p-3 bg-black">
-          <h3 className="font-bold text-red-500 mb-2 flex items-center">
-            <Heart size={16} className="mr-2" />
-            FLOOR 2: MEDICAL & EDUCATION
-          </h3>
-          <ul className="text-sm text-gray-300 space-y-1">
-            <li>• The People's Clinic</li>
-            <li>• Library & Study Rooms</li>
-            <li>• Workshop Spaces</li>
-            <li>• Media Production</li>
-          </ul>
-        </div>
-        
-        <div className="border border-red-900 rounded-lg p-3 bg-black">
-          <h3 className="font-bold text-red-500 mb-2 flex items-center">
-            <Shield size={16} className="mr-2" />
-            FLOOR 3: OPERATIONS
-          </h3>
-          <ul className="text-sm text-gray-300 space-y-1">
-            <li>• Committee Rooms</li>
-            <li>• Communications Hub</li>
-            <li>• Defense Training Area (Wuguan)</li>
-            <li>• Rooftop Garden</li>
-          </ul>
+
+      {/* Community Alerts */}
+      <div>
+        <h2 className="text-xl font-mono text-red-500 font-bold mb-3">[ COMMUNITY_ALERTS ]</h2>
+        <div className="space-y-3">
+          {alerts.map(alert => (
+            <div 
+              key={alert.id} 
+              className={`p-4 rounded-lg border ${
+                alert.type === 'danger' ? 'border-red-700 bg-red-900/10' : 
+                alert.type === 'warning' ? 'border-yellow-700 bg-yellow-900/10' : 
+                'border-blue-700 bg-blue-900/10'
+              }`}
+            >
+              <div className="flex justify-between">
+                <h3 className={`font-mono font-bold ${
+                  alert.type === 'danger' ? 'text-red-500' : 
+                  alert.type === 'warning' ? 'text-yellow-500' : 
+                  'text-blue-500'
+                }`}>{alert.title}</h3>
+                <span className="text-xs opacity-70 font-mono">{alert.time}</span>
+              </div>
+              <div className="text-sm opacity-80 mb-2 font-mono">
+                <Map size={12} className="inline mr-1" />
+                {alert.area}
+              </div>
+              <p className="text-sm">{alert.description}</p>
+            </div>
+          ))}
         </div>
       </div>
-      
-      <div className="border border-red-900 rounded-lg p-4 bg-black">
-        <h3 className="font-bold text-red-500 mb-3">CURRENT STATUS: OPERATIONAL</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-300">
-          <div>
-            <div className="flex justify-between pb-1 mb-1 border-b border-gray-800">
-              <span>Clinic Hours:</span>
-              <span className="text-white">08:00-20:00 (Emergency 24/7)</span>
+
+      {/* Upcoming Events */}
+      <div>
+        <h2 className="text-xl font-mono text-red-500 font-bold mb-3">[ UPCOMING_EVENTS ]</h2>
+        <div className="grid gap-4 md:grid-cols-3">
+          {events.map(event => (
+            <div key={event.id} className="p-4 rounded-lg bg-black border border-red-900">
+              <h3 className="font-bold text-red-500 font-mono">{event.title}</h3>
+              <div className="text-sm opacity-70 mt-2 space-y-1 font-mono">
+                <div>DATE: {event.date}</div>
+                <div>LOCATION: {event.location}</div>
+                <div>ORGANIZER: {event.organizer}</div>
+              </div>
+              <button className="mt-3 px-3 py-1 bg-red-900 border border-red-700 hover:bg-red-800 rounded text-xs font-mono">
+                DETAILS
+              </button>
             </div>
-            <div className="flex justify-between pb-1 mb-1 border-b border-gray-800">
-              <span>Kitchen Service:</span>
-              <span className="text-white">12:00-13:30 & 18:00-19:30</span>
-            </div>
-            <div className="flex justify-between pb-1 mb-1 border-b border-gray-800">
-              <span>Library Hours:</span>
-              <span className="text-white">10:00-22:00</span>
-            </div>
-          </div>
-          <div>
-            <div className="flex justify-between pb-1 mb-1 border-b border-gray-800">
-              <span>Security Level:</span>
-              <span className="text-green-500">Standard</span>
-            </div>
-            <div className="flex justify-between pb-1 mb-1 border-b border-gray-800">
-              <span>Today's Events:</span>
-              <span className="text-white">Study Group (19:00), Defense Training (20:00)</span>
-            </div>
-            <div className="flex justify-between pb-1 mb-1 border-b border-gray-800">
-              <span>Committee Meetings:</span>
-              <span className="text-white">Health (16:00), Defense (21:00)</span>
-            </div>
-          </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Quick Navigation */}
+      <div className="p-4 bg-black border border-red-900 rounded-lg">
+        <h3 className="font-bold text-red-500 mb-4 font-mono">AVAILABLE_RESOURCES</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <button className="p-3 bg-red-900/20 border border-red-900/50 rounded-lg text-center hover:bg-red-900/30">
+            <Heart size={24} className="mx-auto mb-2 text-red-500" />
+            <span className="text-sm">MUTUAL AID</span>
+          </button>
+          <button className="p-3 bg-blue-900/20 border border-blue-900/50 rounded-lg text-center hover:bg-blue-900/30">
+            <BookOpen size={24} className="mx-auto mb-2 text-blue-500" />
+            <span className="text-sm">EDUCATION</span>
+          </button>
+          <button className="p-3 bg-green-900/20 border border-green-900/50 rounded-lg text-center hover:bg-green-900/30">
+            <Shield size={24} className="mx-auto mb-2 text-green-500" />
+            <span className="text-sm">DEFENSE</span>
+          </button>
+          <button className="p-3 bg-yellow-900/20 border border-yellow-900/50 rounded-lg text-center hover:bg-yellow-900/30">
+            <MessageSquare size={24} className="mx-auto mb-2 text-yellow-500" />
+            <span className="text-sm">COMMUNICATIONS</span>
+          </button>
         </div>
       </div>
     </div>
   );
 };
+
+export default App;
